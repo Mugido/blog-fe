@@ -10,15 +10,19 @@ export const getBlogs = async(tags, search) => {
    
    // Handle title search
    if(search && search.trim() !== "") {
-     const searchQuery = `title_like=${search.trim()}`;
+     const searchQuery = `category=${encodeURIComponent(search.trim())}`;
      queryString = queryString ? `${queryString}&${searchQuery}` : searchQuery;
    }
    
    try {
-     const response = await publicAxios.get(`/blogs${queryString ? `?${queryString}` : ''}`);
+     // Use q parameter for full-text search
+     console.log(queryString)
+    const response = await publicAxios.get(`/blogs${queryString ? `?${queryString}` : ''}`);
+    // const response = await publicAxios.get(`/blogs?title=Meta debuts generative AI features for advertisers`);
+     console.log('Search Results:', response.data);
      return response.data;
    } catch (error) {
-     console.log(error);
+     console.error('Search error:', error);
      return [];
    }
 }

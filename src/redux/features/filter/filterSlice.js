@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchBlogs } from "../blogs/blogSlice";
 
 const initialState = {
   tags: [],
@@ -13,7 +14,7 @@ const filterSlice = createSlice({
         state.tags = [action.payload]
     },
     searched: (state, action) => {
-      state.search = action.payload.toLowerCase()
+      state.search = action.payload
     }
   }
 })

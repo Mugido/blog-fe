@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getBlogs } from "./blogsApi";
+import { getBlogs } from "./blogsAPI";
 
 //initial state
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   isError: false,
   error: ""
 }
+
 // async thunk
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async ({tags, search}) => {
   const blogs = await getBlogs(tags, search);
@@ -34,9 +35,7 @@ const blogsSlice = createSlice({
       state.isError = true,
       state.error = action.error?.message
     })
-
   }
-
 })
 
 export default blogsSlice.reducer;
