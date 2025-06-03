@@ -1,33 +1,30 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { searched } from '../redux/features/filter/filterSlice';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { fetchBlogs } from '../redux/features/blogs/blogSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
   const dispatch = useDispatch();
-  // const {search} = useSelector(state => state.filter);
-  const search = useSelector((state) => state.filter.search)
-  const tags = useSelector((state) => state.filter.tags.filter((tag)=> tag.title.toLowerCase().includes(search.toLowerCase())))
+  const navigate = useNavigate();
+  const { search } = useSelector((state) => state.filter);
   const [input, setInput] = useState(search);
-  // console.log(input)
-
-  const match = useMatch("/");
-  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(searched((input)));
-    console.log(tags);
-
-    if(!match){
-        navigate("/")
+    
+    if (input.trim()) {
+      dispatch(searched(input.trim()));
+      dispatch(fetchBlogs({ tags: [], search: input.trim() }));
+      
+      if (window.location.pathname !== '/') {
+        navigate('/');
+      }
     }
-    setInput("")
   }
 
-
   return (
-<form  onSubmit={handleSubmit} className="relative flex items-center h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
+    <form onSubmit={handleSubmit} className="relative flex items-center h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
       <div className="grid place-items-center h-full w-24 text-gray-300">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -50,12 +47,8 @@ const Search = () => {
         type="text"
         id="search"
         value={input}
-        onChange={(e) => setInput(e.target.value)
-          
-        }
+        onChange={(e) => setInput(e.target.value)}
         placeholder="Search something.."
-        
-        
       />
     </form>
   )
